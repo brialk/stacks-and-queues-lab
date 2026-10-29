@@ -5,20 +5,20 @@ class Queue:
         self.items = []
 
     def enqueue(self, item):
-        # TODO: Add an item to the end of the queue
-        pass
+        self.items.append(item)
 
     def dequeue(self):
-        # TODO: Remove and return the item from the front of the queue
-        pass
+        if self.is_empty():
+            raise IndexError("dequeue from an empty queue")
+        return self.items.pop(0)
 
     def peek(self):
-        # TODO: Return the item at the front of the queue without removing it
-        pass
+        if self.is_empty():
+            raise IndexError("peek from an empty queue")
+        return self.items[0]
 
     def is_empty(self):
-        # TODO: Return True if the queue is empty
-        pass
+        return len(self.items) == 0
 
     def select_and_announce_winner(self):
         """
@@ -26,5 +26,26 @@ class Queue:
         Dequeues all items up to and including the winner.
         Returns the name of the winning customer.
         """
-        # TODO: Implement winner selection and dequeue process
-        pass
+        if self.is_empty():
+            raise IndexError("cannot select a winner from an empty queue")
+        
+        winner_index = random.randrange(len(self.items))
+        
+        winner = None
+        for _ in range(winner_index + 1):
+            winner = self.dequeue()
+        
+        print(f"Winner: {winner}")
+        return winner
+
+if __name__ == "__main__":
+    queue = Queue()
+    for number in range(1, 11):
+        queue.enqueue(f"Customer #{number}")
+
+    print("=== Customer Raffle (Queue) ===")
+    print(f"Entries in order: {queue.items}")
+    print(f"Front of line:    {queue.peek()}")
+    winner = queue.select_and_announce_winner()
+    print(f"Removed up to and including {winner}")
+    print(f"Still waiting:    {queue.items}")
